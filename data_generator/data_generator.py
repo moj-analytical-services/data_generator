@@ -1,6 +1,6 @@
 import csv
 import json
-from typing import Any, Optional, AnyStr, IO, Union
+from typing import Any, Optional, AnyStr, IO, Union, Tuple
 from random import choice, choices, uniform, randint
 
 from faker import Faker
@@ -63,16 +63,22 @@ class MetaFaker:
             raise TypeError(f"Column: {n} has unsupported type: {t}")
 
     def fake_int(self, col: dict) -> int:
-        minimum = col.get("minimum", self.default_min)
-        maximum = col.get("maximum", self.default_max)
+        minimum, maximum = self.get_min_max(col)
         value = self.fake.random_int(min=minimum, max=maximum)
         return value
 
     def fake_double(self, col: dict) -> float:
-        minumum = col.get("minumum", self.default_min)
-        maximum = col.get("minumum", self.default_max)
-        value = uniform(minumum, maximum)
+        minimum, maximum = self.get_min_max(col)
+        value = uniform(minimum, maximum)
         return value
+
+    def get_min_max(self, col) -> Tuple[int, int]:
+        """
+        Sets default min max values
+        """
+        minimum = col.get("minimum", self.default_min)
+        maximum = col.get("maximum", self.default_max)
+        return (minimum, maximum)
 
     def fake_character(self, special_type: Optional[str] = None) -> str:
         """
@@ -137,22 +143,39 @@ class MetaFaker:
         Writes the fake data to a jsonl file. Note that total_rows does not include the header.
         Will write header if parameter is True (default).
         """
-        with open(filepath, "w") as f:
-            writer = csv.DictWriter(
-                f, fieldnames=[c["name"] for c in self.columns], delimiter=delimiter
-            )
-            if header:
-                writer.writeheader()
+        local_file = isinstance(filepath, str)
 
-            for i in range(total_rows):
-                writer.writerow(self.generate_row())
+        if local_file:
+            f = open(filepath, "w").open()
+        else:
+            f = filepath
+
+        writer = csv.DictWriter(
+            f, fieldnames=[c["name"] for c in self.columns], delimiter=delimiter
+        )
+        if header:
+            writer.writeheader()
+
+        for i in range(total_rows):
+            writer.writerow(self.generate_row())
+
+        if local_file:
+            f.close()
 
     def write_data_to_jsonl(self, filepath: Union[str, IO[AnyStr]], total_rows: int):
         """
         Writes the fake data to a jsonl file.
         """
+        local_file = isinstance(filepath, str)
 
-        with open(filepath, "w") as f:
-            for i in range(total_rows):
-                json.dump(self.generate_row(), f)
-                f.write("\n")
+        if local_file:
+            f = open(filepath, "w").open()
+        else:
+            f = filepath
+
+        for i in range(total_rows):
+            json.dump(self.generate_row(), f)
+            f.write("\n")
+
+        if local_file:
+            f.close()
