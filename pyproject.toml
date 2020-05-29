@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "data_generator"
+version = "0.0.1"
+description = "Generates data from etl manager meta data"
+authors = ["Karik Isichei <karik.isichei@digital.justice.gov.uk>"]
+license = "MIT"
+exclude = ["tests*"]
+readme = "README.md"
+homepage = "https://github.com/moj-analytical-services/data_generator"
+repository = "https://github.com/moj-analytical-services/data_generator"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+Faker = "^4"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.4"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
