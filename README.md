@@ -1,5 +1,7 @@
 # data_generator
 
+![unit-tests.yml](https://github.com/moj-analytical-services/data_generator/workflows/unit-tests.yml/badge.svg)
+
 Generates data using faker and our meta data schemas. This package expects meta data that conforms to the ETL Manager schema [repo here](https://github.com/moj-analytical-services/etl_manager)
 
 ```python

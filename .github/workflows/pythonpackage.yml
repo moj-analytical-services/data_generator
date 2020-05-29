@@ -1,4 +1,4 @@
-name: pr-checks.yml
+name: unit-tests.yml
 on: [push]
 
 jobs:
