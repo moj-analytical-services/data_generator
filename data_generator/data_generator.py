@@ -146,7 +146,7 @@ class MetaFaker:
         local_file = isinstance(filepath, str)
 
         if local_file:
-            f = open(filepath, "w").open()
+            f = open(filepath, "w")
         else:
             f = filepath
 
@@ -169,7 +169,7 @@ class MetaFaker:
         local_file = isinstance(filepath, str)
 
         if local_file:
-            f = open(filepath, "w").open()
+            f = open(filepath, "w")
         else:
             f = filepath
 
