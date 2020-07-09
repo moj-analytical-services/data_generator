@@ -1,6 +1,7 @@
 import csv
 import json
 from typing import Any, Optional, AnyStr, IO, Union, Tuple
+import random
 from random import choice, choices, uniform, randint
 
 from faker import Faker
@@ -18,6 +19,18 @@ class MetaFaker:
         self.default_min = kwargs.get("default_min", -1000)
         self.default_max = kwargs.get("default_max", 1000)
         self.null_probability = kwargs.get("null_probability", 0.1)
+        self._seed = None
+
+    @property
+    def seed(self):
+        return self._seed
+
+    @seed.setter
+    def seed(self, value):
+        self._seed = value
+        self.fake.seed_instance(value)
+        random.seed(value)
+
 
     def null_column_value(self, col: dict) -> bool:
         """
