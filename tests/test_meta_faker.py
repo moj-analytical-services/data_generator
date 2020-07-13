@@ -4,6 +4,8 @@ from data_generator.data_generator import MetaFaker
 from io import StringIO
 
 from datetime import datetime
+import csv
+import tempfile
 
 
 def test_readme():
@@ -160,3 +162,37 @@ def test_dates(col, exp_fmt):
     row = mf.generate_row()
     assert isinstance(row["test"], str)
     datetime.strptime(row["test"], exp_fmt)
+
+
+def test_seed():
+    meta = {
+        "columns": [
+            {
+                "name": "my_int",
+                "type": "int",
+                "minimum": 10,
+                "maximum": 20,
+                "nullable": True,
+            },
+            {"name": "my_character_enum", "type": "character", "enum": ["a", "b", "c"]},
+            {"name": "my_email", "type": "character",},
+            {"name": "my_datetime", "type": "datetime",},
+        ]
+    }
+
+    sc = {"my_email": "email"}
+
+    mf = MetaFaker(meta=meta, special_cols=sc)
+
+    mf.seed = 888
+
+    with tempfile.TemporaryDirectory() as d:
+        mf.write_data_to_csv(f"{d}/test.csv", total_rows=10)
+
+        with open(f"{d}/test.csv", "r") as t1, open("tests/data/output/seed_test.csv", "r") as t2:
+            fileone = t1.readlines()
+            filetwo = t2.readlines()
+        assert fileone == filetwo, "Problem with seed"
+
+
+
