@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "data_generator"
-version = "0.0.3"
+version = "0.0.4"
 description = "Generates data from etl manager meta data"
 authors = ["Karik Isichei <karik.isichei@digital.justice.gov.uk>"]
 license = "MIT"
