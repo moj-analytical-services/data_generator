@@ -56,7 +56,7 @@ class MetaFaker:
         elif col.get("enum"):
             return self.fake_enum(col.get("enum"))
 
-        elif col["type"] == "int":
+        elif col["type"] in ["int", "long"]:
             return self.fake_int(col)
 
         elif col["type"] in ["double", "float"]:
