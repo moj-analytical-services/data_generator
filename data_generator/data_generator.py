@@ -8,17 +8,25 @@ from faker import Faker
 
 
 class MetaFaker:
-    def __init__(self, meta: dict, **kwargs):
+    def __init__(
+        self,
+        meta: dict,
+        special_cols: dict = {},
+        default_min: int = -1000,
+        default_max: int = 1000,
+        null_probability: float = 0.1,
+        **kwargs,
+    ):
         """
         Creates an object that can generate fake data (using faker)
         based on the information provided via the input metadata.
         """
         self.columns = meta["columns"]
-        self.special_cols = kwargs.get("special_cols", {})
-        self.fake = Faker()
-        self.default_min = kwargs.get("default_min", -1000)
-        self.default_max = kwargs.get("default_max", 1000)
-        self.null_probability = kwargs.get("null_probability", 0.1)
+        self.special_cols = special_cols
+        self.fake = Faker(**kwargs)
+        self.default_min = default_min
+        self.default_max = default_max
+        self.null_probability = null_probability
         self._seed = None
 
     @property
@@ -30,7 +38,6 @@ class MetaFaker:
         self._seed = value
         self.fake.seed_instance(value)
         random.seed(value)
-
 
     def null_column_value(self, col: dict) -> bool:
         """
